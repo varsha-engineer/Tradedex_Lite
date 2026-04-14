@@ -29,7 +29,7 @@ class StockProvider extends ChangeNotifier {
     startLiveUpdates();
   }
 
-  /// 🌐 REAL API FETCH (optional)
+  //REAL API FETCH (optional)
   Future<void> fetchRealPrice() async {
     for (var stock in stocks) {
       try {
@@ -43,7 +43,7 @@ class StockProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// 🔄 LIVE UPDATES (CONTROLLED)
+  /// LIVE UPDATES (CONTROLLED)
   void startLiveUpdates({int interval = 2}) {
     _timer?.cancel();
 
@@ -60,7 +60,7 @@ class StockProvider extends ChangeNotifier {
     });
   }
 
-  /// 🔍 SEARCH
+  ///  SEARCH
   void search(String query) {
     if (query.isEmpty) {
       filtered = stocks;
@@ -72,13 +72,13 @@ class StockProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// 📜 ADD TRADE (BUY/SELL)
+  /// ADD TRADE (BUY/SELL)
   void addTrade(Trade trade) {
     tradeHistory.insert(0, trade);
     notifyListeners();
   }
 
-  /// 🔔 ALERT MOCK
+  ///  ALERT MOCK
   void checkAlerts() {
     for (var stock in stocks) {
       if (stock.price > 3000) {
@@ -87,7 +87,7 @@ class StockProvider extends ChangeNotifier {
     }
   }
 
-  /// 🔄 MANUAL REFRESH
+  /// MANUAL REFRESH
   Future<void> refresh() async {
     await fetchRealPrice();
   }

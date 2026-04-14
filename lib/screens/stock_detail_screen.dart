@@ -32,6 +32,7 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
     final stock = widget.stock;
     final chartData = generateChart();
     final isProfit = stock.change >= 0;
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     final openPrice = stock.price * (isProfit ? 0.96 : 1.03);
     final highPrice = stock.price * (isProfit ? 1.05 : 1.01);
@@ -42,14 +43,17 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
       appBar: AppBar(
         title: Text(stock.name),
         elevation: 0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: isDarkMode
+            ? const Color(0xFF0F172A)
+            : Colors.transparent,
       ),
 
-      /// 🌈 GRADIENT BACKGROUND
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.white, Colors.blue.shade50],
+            colors: isDarkMode
+                ? [const Color(0xFF0F172A), const Color(0xFF1E293B)]
+                : [Colors.white, Colors.blue.shade50],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -60,26 +64,28 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              /// 🏷 STOCK NAME
+              ///  STOCK NAME
               Text(
                 stock.name,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
+                  color: isDarkMode ? Colors.white : Colors.black,
                 ),
               ),
 
               const SizedBox(height: 10),
 
-              /// 💰 PRICE + CHANGE
+              ///  PRICE + CHANGE
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
                     '₹${stock.price.toStringAsFixed(2)}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
+                      color: isDarkMode ? Colors.white : Colors.black,
                     ),
                   ),
                   const SizedBox(width: 14),
@@ -109,7 +115,7 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
 
               const SizedBox(height: 20),
 
-              /// ⏱ TIME FILTER (INTERACTIVE)
+              /// TIME FILTER (INTERACTIVE)
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: ["1D", "1W", "1M", "1Y", "5Y"].map((e) {
@@ -122,6 +128,8 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                       label: Text(e),
                       backgroundColor: isSelected
                           ? Colors.blue.shade100
+                          : isDarkMode
+                          ? Colors.grey.shade700
                           : Colors.grey.shade200,
                     ),
                   );
@@ -130,7 +138,7 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
 
               const SizedBox(height: 20),
 
-              /// 📊 CHART
+              ///  CHART
               Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(24),
@@ -151,12 +159,14 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                             LineChartBarData(
                               spots: chartData,
                               isCurved: true,
-                              color: Colors.indigo,
+                              color: isProfit ? Colors.green : Colors.red,
                               barWidth: 4,
                               dotData: FlDotData(show: false),
                               belowBarData: BarAreaData(
                                 show: true,
-                                color: const Color.fromRGBO(13, 71, 161, 0.2),
+                                color: isProfit
+                                    ? const Color.fromRGBO(76, 175, 80, 0.15)
+                                    : const Color.fromRGBO(244, 67, 54, 0.15),
                               ),
                             ),
                           ],
@@ -169,10 +179,14 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
 
               const SizedBox(height: 24),
 
-              /// 📊 PRICE DETAILS
-              const Text(
-                'Today’s price action',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              ///  PRICE DETAILS
+              Text(
+                'Today\'s price action',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: isDarkMode ? Colors.white : Colors.black,
+                ),
               ),
 
               const SizedBox(height: 16),
@@ -209,20 +223,26 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
 
               const SizedBox(height: 24),
 
-              /// 🏢 COMPANY INFO
-              const Text(
+              ///  COMPANY INFO
+              Text(
                 "About",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: isDarkMode ? Colors.white : Colors.black,
+                ),
               ),
               const SizedBox(height: 6),
-              const Text(
+              Text(
                 "This company is a leading global tech firm focusing on innovation, AI, and digital platforms.",
-                style: TextStyle(color: Colors.grey),
+                style: TextStyle(
+                  color: isDarkMode ? Colors.grey.shade400 : Colors.grey,
+                ),
               ),
 
               const SizedBox(height: 30),
 
-              /// 🔥 BUY / SELL BUTTONS
+              ///  BUY / SELL BUTTONS
               Row(
                 children: [
                   Expanded(
@@ -298,17 +318,21 @@ class _DetailTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: isDarkMode ? const Color(0xFF1E293B) : Colors.white,
           borderRadius: BorderRadius.circular(18),
-          boxShadow: const [
+          boxShadow: [
             BoxShadow(
-              color: Color.fromRGBO(0, 0, 0, 0.05),
+              color: isDarkMode
+                  ? const Color.fromRGBO(0, 0, 0, 0.3)
+                  : const Color.fromRGBO(0, 0, 0, 0.05),
               blurRadius: 18,
-              offset: Offset(0, 8),
+              offset: const Offset(0, 8),
             ),
           ],
         ),
@@ -317,12 +341,21 @@ class _DetailTile extends StatelessWidget {
           children: [
             Text(
               label,
-              style: const TextStyle(color: Color(0xFF667085), fontSize: 13),
+              style: TextStyle(
+                color: isDarkMode
+                    ? Colors.grey.shade400
+                    : const Color(0xFF667085),
+                fontSize: 13,
+              ),
             ),
             const SizedBox(height: 6),
             Text(
               value,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: isDarkMode ? Colors.white : Colors.black,
+              ),
             ),
           ],
         ),

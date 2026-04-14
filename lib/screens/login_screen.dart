@@ -90,12 +90,15 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthProvider>(context);
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF0C2F71), Color(0xFF1E7FE6)],
+            colors: isDarkMode
+                ? const [Color(0xFF0F172A), Color(0xFF1E293B)]
+                : const [Color(0xFF0C2F71), Color(0xFF1E7FE6)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -109,13 +112,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 curve: Curves.easeOutCubic,
                 padding: const EdgeInsets.all(26),
                 decoration: BoxDecoration(
-                  color: const Color.fromRGBO(255, 255, 255, 0.96),
+                  color: isDarkMode
+                      ? const Color.fromRGBO(30, 41, 59, 0.96)
+                      : const Color.fromRGBO(255, 255, 255, 0.96),
                   borderRadius: BorderRadius.circular(28),
-                  boxShadow: const [
+                  boxShadow: [
                     BoxShadow(
-                      color: Color.fromRGBO(0, 0, 0, 0.18),
+                      color: Color.fromRGBO(0, 0, 0, isDarkMode ? 0.4 : 0.18),
                       blurRadius: 28,
-                      offset: Offset(0, 14),
+                      offset: const Offset(0, 14),
                     ),
                   ],
                 ),
@@ -124,20 +129,27 @@ class _LoginScreenState extends State<LoginScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const SizedBox(height: 4),
-                    const Text(
+                    Text(
                       'TradeX Lite',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 34,
                         fontWeight: FontWeight.w800,
-                        color: Color(0xFF172B4D),
+                        color: isDarkMode
+                            ? Colors.white
+                            : const Color(0xFF172B4D),
                       ),
                     ),
                     const SizedBox(height: 10),
-                    const Text(
+                    Text(
                       'Secure access to your market watch list with password or biometrics.',
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 15, color: Color(0xFF5A6A82)),
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: isDarkMode
+                            ? Colors.grey.shade400
+                            : const Color(0xFF5A6A82),
+                      ),
                     ),
                     const SizedBox(height: 28),
                     TextField(
@@ -205,7 +217,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     if (auth.biometricAvailable)
                       TextButton.icon(
                         style: TextButton.styleFrom(
-                          foregroundColor: const Color(0xFF0D47A1),
+                          foregroundColor: isDarkMode
+                              ? Colors.blue.shade400
+                              : const Color(0xFF0D47A1),
                           padding: const EdgeInsets.symmetric(vertical: 14),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
@@ -221,12 +235,16 @@ class _LoginScreenState extends State<LoginScreen> {
                             : () => _attemptBiometric(auth),
                       ),
                     if (!auth.biometricAvailable)
-                      const Padding(
-                        padding: EdgeInsets.only(top: 12),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 12),
                         child: Text(
                           'Biometric login is not available on this device.',
                           textAlign: TextAlign.center,
-                          style: TextStyle(color: Color(0xFF8C96A8)),
+                          style: TextStyle(
+                            color: isDarkMode
+                                ? Colors.grey.shade500
+                                : const Color(0xFF8C96A8),
+                          ),
                         ),
                       ),
                   ],

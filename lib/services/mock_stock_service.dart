@@ -4,7 +4,7 @@ import '../models/stock.dart';
 class MockStockService {
   final Random _random = Random();
 
-  /// 📊 Initial Stock List (REALISTIC)
+  /// Initial Stock List (REALISTIC)
   List<Stock> getInitialStocks() {
     return [
       Stock(name: "AAPL", price: 150, change: 0),

@@ -21,7 +21,7 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  /// 🔐 Normal Login
+  ///  Normal Login
   Future<bool> login(String email, String password) async {
     if (email.isNotEmpty && password.length >= 4) {
       isLoggedIn = true;
@@ -31,7 +31,7 @@ class AuthProvider extends ChangeNotifier {
     return false;
   }
 
-  /// 👉 BIOMETRIC LOGIN (FINGERPRINT + FACE)
+  /// BIOMETRIC LOGIN (FINGERPRINT + FACE)
   Future<bool> biometricLogin() async {
     try {
       final isAvailable = await _auth.canCheckBiometrics;

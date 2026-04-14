@@ -25,20 +25,23 @@ class MarketWatchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final provider = Provider.of<StockProvider>(context);
     final auth = Provider.of<AuthProvider>(context, listen: false);
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       backgroundColor: Colors.transparent,
 
-      /// 🔥 PREMIUM APPBAR
+      /// APPBAR
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: isDarkMode
+            ? const Color(0xFF0F172A)
+            : Colors.transparent,
         title: const Text(
           'Market Watch',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [
-          /// 📜 Trade History Button
+          /// Trade History Button
           IconButton(
             icon: const Icon(Icons.history),
             tooltip: "Trade History",
@@ -50,7 +53,7 @@ class MarketWatchScreen extends StatelessWidget {
             },
           ),
 
-          /// ⚙ Settings
+          ///  Settings
           IconButton(
             icon: const Icon(Icons.settings),
             tooltip: 'Settings',
@@ -65,7 +68,7 @@ class MarketWatchScreen extends StatelessWidget {
             },
           ),
 
-          /// 🚪 Logout
+          ///  Logout
           IconButton(
             icon: const Icon(Icons.logout_outlined),
             tooltip: 'Sign out',
@@ -74,17 +77,18 @@ class MarketWatchScreen extends StatelessWidget {
         ],
       ),
 
-      /// 🌈 GRADIENT BACKGROUND
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.white, Colors.blue.shade50],
+            colors: isDarkMode
+                ? [const Color(0xFF0F172A), const Color(0xFF1E293B)]
+                : [Colors.white, Colors.blue.shade50],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
         ),
 
-        /// 🔄 PULL TO REFRESH
+        ///  PULL TO REFRESH
         child: RefreshIndicator(
           onRefresh: () async {
             provider.startLiveUpdates(); // refresh data
@@ -95,7 +99,7 @@ class MarketWatchScreen extends StatelessWidget {
             physics: const AlwaysScrollableScrollPhysics(),
 
             slivers: [
-              /// 🔝 HEADER
+              ///  HEADER
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -105,21 +109,24 @@ class MarketWatchScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      /// 📊 INFO CARD
                       Container(
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: isDarkMode
+                              ? const Color(0xFF1E293B)
+                              : Colors.white,
                           borderRadius: BorderRadius.circular(24),
-                          boxShadow: const [
+                          boxShadow: [
                             BoxShadow(
-                              color: Color.fromRGBO(0, 0, 0, 0.05),
+                              color: isDarkMode
+                                  ? const Color.fromRGBO(0, 0, 0, 0.3)
+                                  : const Color.fromRGBO(0, 0, 0, 0.05),
                               blurRadius: 22,
-                              offset: Offset(0, 10),
+                              offset: const Offset(0, 10),
                             ),
                           ],
                         ),
                         padding: const EdgeInsets.all(20),
-                        child: const Column(
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
@@ -127,12 +134,17 @@ class MarketWatchScreen extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
+                                color: isDarkMode ? Colors.white : Colors.black,
                               ),
                             ),
-                            SizedBox(height: 8),
+                            const SizedBox(height: 8),
                             Text(
                               'Track market movers, view live pricing, and explore stock details.',
-                              style: TextStyle(color: Color(0xFF667085)),
+                              style: TextStyle(
+                                color: isDarkMode
+                                    ? Colors.grey.shade400
+                                    : const Color(0xFF667085),
+                              ),
                             ),
                           ],
                         ),
@@ -140,13 +152,15 @@ class MarketWatchScreen extends StatelessWidget {
 
                       const SizedBox(height: 18),
 
-                      /// 🔍 SEARCH
+                      ///  SEARCH
                       TextField(
                         decoration: InputDecoration(
                           hintText: 'Search stocks',
                           prefixIcon: const Icon(Icons.search),
                           filled: true,
-                          fillColor: Colors.white,
+                          fillColor: isDarkMode
+                              ? const Color(0xFF334155)
+                              : Colors.white,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(18),
                             borderSide: BorderSide.none,
@@ -157,12 +171,14 @@ class MarketWatchScreen extends StatelessWidget {
 
                       const SizedBox(height: 18),
 
-                      /// 📊 COUNT
+                      ///  COUNT
                       Text(
                         '${provider.filtered.length} stocks available',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 14,
-                          color: Color(0xFF667085),
+                          color: isDarkMode
+                              ? Colors.grey.shade400
+                              : const Color(0xFF667085),
                         ),
                       ),
                     ],
@@ -170,7 +186,7 @@ class MarketWatchScreen extends StatelessWidget {
                 ),
               ),
 
-              /// 📈 STOCK LIST
+              ///  STOCK LIST
               SliverList(
                 delegate: SliverChildBuilderDelegate((context, index) {
                   final stock = provider.filtered[index];

@@ -8,6 +8,9 @@ export 'app.dart';
 import 'providers/auth_provider.dart';
 import 'providers/stock_provider.dart';
 import 'providers/settings_provider.dart';
+import 'screens/splash_screen.dart';
+import 'screens/login_screen.dart';
+import 'screens/market_watch_screen.dart';
 
 void main() async {
   await Hive.initFlutter();

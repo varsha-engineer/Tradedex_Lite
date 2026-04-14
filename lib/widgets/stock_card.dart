@@ -10,6 +10,8 @@ class StockCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isProfit = stock.change >= 0;
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     final changeColor = isProfit
         ? const Color(0xFF4CAF50)
         : const Color(0xFFF44336);
@@ -26,11 +28,13 @@ class StockCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(22),
-            boxShadow: const [
+            boxShadow: [
               BoxShadow(
-                color: Color.fromRGBO(0, 0, 0, 0.06),
+                color: isDarkMode
+                    ? const Color.fromRGBO(0, 0, 0, 0.3)
+                    : const Color.fromRGBO(0, 0, 0, 0.06),
                 blurRadius: 20,
-                offset: Offset(0, 8),
+                offset: const Offset(0, 8),
               ),
             ],
           ),
@@ -44,17 +48,20 @@ class StockCard extends StatelessWidget {
                   children: [
                     Text(
                       stock.name,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
+                        color: isDarkMode ? Colors.white : Colors.black,
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       '₹${stock.price.toStringAsFixed(2)}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 15,
-                        color: Color(0xFF61718B),
+                        color: isDarkMode
+                            ? Colors.grey.shade400
+                            : const Color(0xFF61718B),
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -82,7 +89,9 @@ class StockCard extends StatelessWidget {
                           'Intraday',
                           style: TextStyle(
                             fontSize: 13,
-                            color: Colors.grey.shade600,
+                            color: isDarkMode
+                                ? Colors.grey.shade500
+                                : Colors.grey.shade600,
                           ),
                         ),
                       ],
