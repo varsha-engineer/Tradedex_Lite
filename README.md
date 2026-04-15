@@ -99,10 +99,21 @@ flutter run
 
 ### Test Biometric Login
 **Android Emulator:**
-- Open Extended Controls → Fingerprint tab → Add ID → Simulate touch
+- Open Extended Controls (three dots ⋮ → Extended Controls)
+- Go to Fingerprint tab
+- Click "Add ID" to add a fingerprint
+- Click "Touch Sensor" to simulate fingerprint touch
+- The biometric button should appear in the login screen
 
 **Real Device:**
-- Settings → Security → Biometrics → Enroll Fingerprint/Face → Use in app
+- Go to Settings → Security → Biometrics → Enroll Fingerprint/Face
+- Ensure at least one biometric is enrolled
+- Grant permission when prompted by the app
+
+**Troubleshooting:**
+- If biometric button doesn't appear: Biometrics not enrolled or device doesn't support it
+- If authentication fails: Try re-enrolling biometrics or restart the device
+- For Android: Ensure app has biometric permissions (automatically handled by local_auth plugin)
 
 ---
 

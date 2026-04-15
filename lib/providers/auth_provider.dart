@@ -37,7 +37,12 @@ class AuthProvider extends ChangeNotifier {
       final isAvailable = await _auth.canCheckBiometrics;
       final isDeviceSupported = await _auth.isDeviceSupported();
 
-      if (!isAvailable || !isDeviceSupported) return false;
+      if (!isAvailable || !isDeviceSupported) {
+        debugPrint(
+          "Biometric not available: canCheck=$isAvailable, deviceSupported=$isDeviceSupported",
+        );
+        return false;
+      }
 
       final didAuthenticate = await _auth.authenticate(
         localizedReason: 'Authenticate to access TradeX Lite',
@@ -51,6 +56,8 @@ class AuthProvider extends ChangeNotifier {
         isLoggedIn = true;
         notifyListeners();
         return true;
+      } else {
+        debugPrint("Biometric authentication was cancelled or failed");
       }
     } catch (e) {
       debugPrint("Biometric Error: $e");

@@ -33,9 +33,7 @@ class MarketWatchScreen extends StatelessWidget {
       /// APPBAR
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: isDarkMode
-            ? const Color(0xFF0F172A)
-            : Colors.transparent,
+        backgroundColor: isDarkMode ? const Color(0xFF0F172A) : Colors.white,
         title: const Text(
           'Market Watch',
           style: TextStyle(fontWeight: FontWeight.bold),

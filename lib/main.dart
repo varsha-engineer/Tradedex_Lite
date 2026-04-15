@@ -19,8 +19,18 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
-        ChangeNotifierProvider(create: (_) => StockProvider()),
         ChangeNotifierProvider(create: (_) => SettingsProvider()),
+        ChangeNotifierProvider(
+          create: (context) {
+            final stockProvider = StockProvider();
+            final settingsProvider = Provider.of<SettingsProvider>(
+              context,
+              listen: false,
+            );
+            stockProvider.setSettings(settingsProvider);
+            return stockProvider;
+          },
+        ),
       ],
       child: const MyApp(),
     ),

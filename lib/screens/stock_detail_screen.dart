@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/stock.dart';
 import '../providers/stock_provider.dart';
+import '../providers/settings_provider.dart';
 import '../models/trade.dart';
 
 class StockDetailScreen extends StatefulWidget {
@@ -30,6 +31,7 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final stock = widget.stock;
+    final settings = Provider.of<SettingsProvider>(context);
     final chartData = generateChart();
     final isProfit = stock.change >= 0;
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
@@ -43,9 +45,7 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
       appBar: AppBar(
         title: Text(stock.name),
         elevation: 0,
-        backgroundColor: isDarkMode
-            ? const Color(0xFF0F172A)
-            : Colors.transparent,
+        backgroundColor: isDarkMode ? const Color(0xFF0F172A) : Colors.white,
       ),
 
       body: Container(
@@ -81,7 +81,7 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    '₹${stock.price.toStringAsFixed(2)}',
+                    settings.formatPrice(stock.price),
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
@@ -195,12 +195,12 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                 children: [
                   _DetailTile(
                     label: 'Open',
-                    value: '₹${openPrice.toStringAsFixed(2)}',
+                    value: settings.formatPrice(openPrice),
                   ),
                   const SizedBox(width: 12),
                   _DetailTile(
                     label: 'High',
-                    value: '₹${highPrice.toStringAsFixed(2)}',
+                    value: settings.formatPrice(highPrice),
                   ),
                 ],
               ),
@@ -211,12 +211,12 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                 children: [
                   _DetailTile(
                     label: 'Low',
-                    value: '₹${lowPrice.toStringAsFixed(2)}',
+                    value: settings.formatPrice(lowPrice),
                   ),
                   const SizedBox(width: 12),
                   _DetailTile(
                     label: 'Close',
-                    value: '₹${stock.price.toStringAsFixed(2)}',
+                    value: settings.formatPrice(stock.price),
                   ),
                 ],
               ),

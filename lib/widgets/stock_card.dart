@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/stock.dart';
+import '../providers/settings_provider.dart';
 
 class StockCard extends StatelessWidget {
   final Stock stock;
@@ -9,6 +11,7 @@ class StockCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final settings = Provider.of<SettingsProvider>(context);
     final isProfit = stock.change >= 0;
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
@@ -56,7 +59,7 @@ class StockCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      '₹${stock.price.toStringAsFixed(2)}',
+                      settings.formatPrice(stock.price),
                       style: TextStyle(
                         fontSize: 15,
                         color: isDarkMode

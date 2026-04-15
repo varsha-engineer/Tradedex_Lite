@@ -6,6 +6,7 @@ import 'package:tradex_lite/services/stock_api_service.dart';
 import '../models/stock.dart';
 import '../models/trade.dart';
 import '../services/mock_stock_service.dart';
+import 'settings_provider.dart';
 
 class StockProvider extends ChangeNotifier {
   final MockStockService _mockService = MockStockService();
@@ -18,10 +19,18 @@ class StockProvider extends ChangeNotifier {
   List<Trade> tradeHistory = [];
 
   Timer? _timer;
+  SettingsProvider? _settings;
 
   StockProvider() {
     _init();
   }
+
+  void setSettings(SettingsProvider settings) {
+    _settings = settings;
+    notifyListeners();
+  }
+
+  SettingsProvider get settings => _settings ?? SettingsProvider();
 
   void _init() {
     stocks = _mockService.getInitialStocks();

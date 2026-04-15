@@ -19,9 +19,7 @@ class TradeHistoryScreen extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         elevation: 0,
-        backgroundColor: isDarkMode
-            ? const Color(0xFF0F172A)
-            : Colors.transparent,
+        backgroundColor: isDarkMode ? const Color(0xFF0F172A) : Colors.white,
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -108,6 +106,10 @@ class TradeHistoryScreen extends StatelessWidget {
                     sliver: SliverList(
                       delegate: SliverChildBuilderDelegate((context, index) {
                         final trade = provider.tradeHistory[index];
+                        final settings = Provider.of<StockProvider>(
+                          context,
+                          listen: false,
+                        ).settings;
                         final isBuy = trade.type == 'BUY';
                         final totalAmount = trade.price * trade.qty;
                         final date = DateFormat(
@@ -134,16 +136,17 @@ class TradeHistoryScreen extends StatelessWidget {
                             ),
                             padding: const EdgeInsets.all(16),
                             child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 /// Trade Type Icon
                                 Container(
-                                  width: 56,
-                                  height: 56,
+                                  width: 48,
+                                  height: 48,
                                   decoration: BoxDecoration(
                                     color: isBuy
                                         ? Colors.green.shade50
                                         : Colors.red.shade50,
-                                    borderRadius: BorderRadius.circular(14),
+                                    borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Icon(
                                     isBuy
@@ -152,34 +155,36 @@ class TradeHistoryScreen extends StatelessWidget {
                                     color: isBuy
                                         ? Colors.green.shade600
                                         : Colors.red.shade600,
-                                    size: 28,
+                                    size: 24,
                                   ),
                                 ),
-                                const SizedBox(width: 16),
+                                const SizedBox(width: 12),
 
-                                /// Trade Details
+                                /// Trade Details - Made more flexible
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(
-                                            '${trade.type} ${trade.qty} units',
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w700,
-                                              color: isDarkMode
-                                                  ? Colors.white
-                                                  : Colors.black,
+                                          Expanded(
+                                            child: Text(
+                                              '${trade.type} ${trade.qty} units',
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w600,
+                                                color: isDarkMode
+                                                    ? Colors.white
+                                                    : Colors.black,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
                                             ),
                                           ),
+                                          const SizedBox(width: 8),
                                           Container(
                                             padding: const EdgeInsets.symmetric(
-                                              horizontal: 10,
+                                              horizontal: 8,
                                               vertical: 4,
                                             ),
                                             decoration: BoxDecoration(
@@ -187,12 +192,12 @@ class TradeHistoryScreen extends StatelessWidget {
                                                   ? Colors.green.shade50
                                                   : Colors.orange.shade50,
                                               borderRadius:
-                                                  BorderRadius.circular(8),
+                                                  BorderRadius.circular(6),
                                             ),
                                             child: Text(
                                               trade.status,
                                               style: TextStyle(
-                                                fontSize: 11,
+                                                fontSize: 10,
                                                 fontWeight: FontWeight.w600,
                                                 color:
                                                     trade.status == 'Completed'
@@ -203,11 +208,11 @@ class TradeHistoryScreen extends StatelessWidget {
                                           ),
                                         ],
                                       ),
-                                      const SizedBox(height: 6),
+                                      const SizedBox(height: 4),
                                       Text(
                                         date,
                                         style: TextStyle(
-                                          fontSize: 12,
+                                          fontSize: 11,
                                           color: isDarkMode
                                               ? Colors.grey.shade500
                                               : const Color(0xFF98A2B3),
@@ -217,31 +222,38 @@ class TradeHistoryScreen extends StatelessWidget {
                                   ),
                                 ),
 
-                                /// Price
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      '₹${totalAmount.toStringAsFixed(2)}',
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w700,
-                                        color: isDarkMode
-                                            ? Colors.white
-                                            : Colors.black,
+                                const SizedBox(width: 12),
+
+                                /// Price - Fixed width to prevent overflow
+                                SizedBox(
+                                  width: 80,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        settings.formatPrice(totalAmount),
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w700,
+                                          color: isDarkMode
+                                              ? Colors.white
+                                              : Colors.black,
+                                        ),
+                                        textAlign: TextAlign.right,
                                       ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      '@ ₹${trade.price.toStringAsFixed(2)}',
-                                      style: TextStyle(
-                                        fontSize: 11,
-                                        color: isDarkMode
-                                            ? Colors.grey.shade500
-                                            : const Color(0xFF98A2B3),
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        '@ ${settings.formatPrice(trade.price)}',
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          color: isDarkMode
+                                              ? Colors.grey.shade500
+                                              : const Color(0xFF98A2B3),
+                                        ),
+                                        textAlign: TextAlign.right,
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
